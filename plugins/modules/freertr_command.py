@@ -7,10 +7,13 @@
 import time
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six import string_types
+from ansible.utils.display import Display
 from ansible_collections.rare.freertr.plugins.module_utils.network.freertr import run_commands
 from ansible_collections.rare.freertr.plugins.module_utils.network.freertr import freertr_argument_spec, check_args
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import ComplexList
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.parsing import Conditional
+
+display = Display()
 
 def toLines(stdout):
     for item in stdout:
@@ -33,6 +36,7 @@ def parse_commands(module, warnings):
 def main():
     """main entry point for module execution
     """
+
     argument_spec = {
         'commands': {'type': 'list', 'required':True},
         'wait_for': {'type':'list', 'elements': 'str'},
@@ -62,7 +66,7 @@ def main():
     while retries > 0:
         responses = run_commands(module, commands)
 
-        for item in [conditionals]:
+        for item in conditionals:
             if item(responses):
                 if match == 'any':
                     conditionals = []
@@ -83,7 +87,7 @@ def main():
     result.update({
         'changed': False,
         'stdout': responses,
-        'stdout_lines': [toLines(responses)]
+        'stdout_lines': list(toLines(responses))
     })
 
     module.exit_json(**result)
