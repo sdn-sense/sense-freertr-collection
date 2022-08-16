@@ -140,8 +140,7 @@ class Interfaces(FactsBase):
                 if splLine[0] == 'interface':
                     # Ignore first line
                     continue
-                tmpD = out.setdefault(splLine[0], [])
-                tmpD.append(self.getLLDPIntfInfo(splLine))
+                tmpD = out.setdefault(splLine[0], self.getLLDPIntfInfo(splLine))
         return out
 
     def getLLDPIntfInfo(self, splLine):
