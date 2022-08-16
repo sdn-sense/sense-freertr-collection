@@ -113,13 +113,18 @@ class Interfaces(FactsBase):
             unpLines = "\n".join(intfDict['unparsed'])
             tmpD['description'] = self.parseDesc(unpLines)
             tmpD['type'] = self.parseType(unpLines)
-            tmpD['hwaddr'] = self.parseHwaddr(unpLines)
+            tmpD['mac'] = self.parseHwaddr(unpLines)
             tmpD['mtu'] = self.parseMTU(unpLines)
-            tmpD['bw'] = self.parseBW(unpLines)
+            tmpD['speed'] = self.parseBW(unpLines)
             tmpD['vrf'] = self.parseVrf(unpLines)
             # TODO: It could be multiple IPs. Need to test and identify that
             tmpD['ipv4'] = self.parseIpv4(unpLines)
             tmpD['ipv6'] = self.parseIpv6(unpLines)
+            # If interface is vlan it will have name sdn1.3600
+            # Identifying vlan id.
+            match = re.search(r'\S+\.([0-9]*)', intfName, re.M)
+            if match:
+                tmpD['vlanid'] = match.group(1)
 
         self.facts['all_ipv4_addresses'] = self.populateIPv4Addresses(self.responses[1])
         self.facts['all_ipv6_addresses'] = self.populateIPv4Addresses(self.responses[2])
@@ -148,7 +153,9 @@ class Interfaces(FactsBase):
                 continue
             match = re.search(r'peer *(\S+)$', line, re.M)
             if match:
-                out['remote_chassis_id'] = match.group(1).strip().replace('.', '')
+                macaddr = match.group(1).strip().replace('.', '')
+                split_mac = [macaddr[index : index + 2] for index in range(0, len(macaddr), 2)]
+                out['remote_chassis_id'] = ":".join(split_mac)
             match = re.search(r'port id *([^$]*)$', line, re.M)
             if match:
                 out['remote_port_id'] = match.group(1).strip()
@@ -213,7 +220,13 @@ class Interfaces(FactsBase):
         #  type is sdn, hwaddr=0015.180b.6038, mtu=1496, bw=8000kbps, vrf=CORE
         match = re.search(r'bw=([^ ,]*)', data, re.M)
         if match:
-            return match.group(1).strip()
+            speed = match.group(1).strip()
+            if speed.endswith('kbps'):
+                return int(speed[:-4]) // 1000
+            if speed.endswith('mbps'):
+                return int(speed[:-4])
+            if speed.endswith('gbps'):
+                return int(speed[:-4]) * 1000
         return ""
 
     @staticmethod
@@ -231,7 +244,9 @@ class Interfaces(FactsBase):
         #  type is sdn, hwaddr=0015.180b.6038, mtu=1496, bw=8000kbps, vrf=CORE
         match = re.search(r'hwaddr=([^ ,]*)', data, re.M)
         if match and match.group(1).strip() != 'none':
-            return match.group(1).strip().replace('.', '')
+            macaddr = match.group(1).strip().replace('.', '')
+            split_mac = [macaddr[index : index + 2] for index in range(0, len(macaddr), 2)]
+            return ":".join(split_mac)
         return ""
 
     @staticmethod
