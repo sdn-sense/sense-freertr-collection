@@ -140,7 +140,7 @@ class Interfaces(FactsBase):
                 if splLine[0] == 'interface':
                     # Ignore first line
                     continue
-                tmpD = out.setdefault(splLine[0], self.getLLDPIntfInfo(splLine))
+                out.setdefault(splLine[0], self.getLLDPIntfInfo(splLine))
         return out
 
     def getLLDPIntfInfo(self, splLine):
@@ -283,51 +283,54 @@ class Interfaces(FactsBase):
         return parsed
 
 
-# Add New Class for Routing:
-        # 4 and 5 gives:
-# BUR0051#show vrf routing
-#                     ifc     uni     mlt     flw     lab     con
-# name      rd        v4  v6  v4  v6  v4  v6  v4  v6  v4  v6  v4  v6
-# CORE      0:0       12  5   33  20  33  20  0   0   0   0   10  5
-# INB_MGNT  20965:14  1   0   1   0   1   0   0   0   0   0   1   0
-# lin       0:0       1   0   2   0   2   0   0   0   0   0   1   0
-# oob       0:0       1   1   4   2   4   2   0   0   0   0   2   1
-# p4        0:0       0   0   0   0   0   0   0   0   0   0   0   0
-# v1        0:0       1   0   2   0   2   0   0   0   0   0   1   0
-# v2        0:0       1   0   2   0   2   0   0   0   0   0   1   0
+class Routing(FactsBase):
+    """Routing Information Class"""
+    COMMANDS = [
+        'show vrf routing',
+    ]
 
-#
-#
-# And by taking vrf name:
-# BUR0051#show ipv6 route CORE
-# typ  prefix                             metric  iface      hop                    time
-# C    fd00:67:7e69::a:8:e:0/120          0/0     sdn5.3607  null                   3d5h
-# LOC  fd00:67:7e69::a:8:e:2/128          0/1     sdn5.3607  null                   3d5h
-# O    fd00:515e:898::a:6:6:6/128         110/40  sdn5.3607  fd00:67:7e69::a:8:e:1  09:11:46
-# O    fd00:51e5::a:1:1:1/128             110/30  sdn5.3607  fd00:67:7e69::a:8:e:1  09:11:46
-# O    fd00:51e5::a:2:2:2/128             110/40  sdn5.3607  fd00:67:7e69::a:8:e:1  09:14:43
-# O    fd00:51e5::a:3:3:3/128             110/50  sdn5.3607  fd00:67:7e69::a:8:e:1  09:08:38
-# O    fd00:51e5::a:4:4:4/128             110/40  sdn5.3607  fd00:67:7e69::a:8:e:1  09:17:16
-# O    fd00:51e5::a:5:5:5/128             110/60  sdn5.3607  fd00:67:7e69::a:8:e:1  06:52:08
-# O    fd00:51e5::a:a:a:a/128             110/40  sdn5.3607  fd00:67:7e69::a:8:e:1  09:11:43
-# O    fd00:51e5::a:c:c:c/128             110/50  sdn5.3607  fd00:67:7e69::a:8:e:1  00:05:22
-# O    fd00:51e5::a:63:63:63/128          110/50  sdn5.3607  fd00:67:7e69::a:8:e:1  01:37:48
-# O    fd00:51e5:4bd::a:9:9:9/128         110/40  sdn5.3607  fd00:67:7e69::a:8:e:1  1d4h
-# O    fd00:51e5:4e70::a:f:f:f/128        110/20  sdn5.3607  fd00:67:7e69::a:8:e:1  3d5h
-# O    fd00:51e5:4e70:4e3:a:10:10:10/128  110/40  sdn5.3607  fd00:67:7e69::a:8:e:1  3d5h
-# C    fd00:51e5:7e69::a:e:e:e/128        0/0     loopback0  null                   39d6h
-# C    fd00:51e5:7e69::a:e:f:0/120        0/0     sdn1       null                   39d6h
-# LOC  fd00:51e5:7e69::a:e:f:e/128        0/1     sdn1       null                   39d6h
-# C    fd00:7e69:4e70::a:13:10:0/120      0/0     sdn5.3610  null                   31d3h
-# LOC  fd00:7e69:4e70::a:13:10:1/128      0/1     sdn5.3610  null                   31d3h
-# C    fe80::/64                          0/0     sdn5.3607  null                   3d5h
+    def populate(self):
+        super(Routing, self).populate()
+        self.facts['routing'] = self.parserouting(self.responses[0])
 
+    def parserouting(self, data):
+        """Parse routing"""
+        vrfs = []
+        out = {}
+        lineNum = 0
+        for line in data.split('\n'):
+            lineNum += 1
+            # Ignoring first 2 lines
+            if lineNum <= 2:
+                continue
+            splLine = line.split(' ')
+            vrfs.append(splLine[0])
+        out = self.parseallvrfs(vrfs, 'ipv4', out)
+        out = self.parseallvrfs(vrfs, 'ipv6', out)
+        return out
 
-
+    def parseallvrfs(self, vrfs, iptype, out):
+        """Get and Parse all vrfs for iptype (ipv4/ipv6)"""
+        out.setdefault(iptype, [])
+        for vrf in vrfs:
+            vrfInfo = self.run([f"show {iptype} route {vrf}"])
+            keys = []
+            lineNum = 0
+            for vrfEntry in vrfInfo[0].split('\n'):
+                lineNum += 1
+                values = list(filter(None, vrfEntry.split(' ')))
+                if lineNum == 1:
+                    keys = values
+                    continue
+                tmpDict = dict(zip(keys, values))
+                tmpDict['vrf'] = vrf
+                out[iptype].append(tmpDict)
+        return out
 
 FACT_SUBSETS = {'default': Default,
                 'hardware': Hardware,
                 'interfaces': Interfaces,
+                'routing': Routing,
                 'config': Config}
 
 VALID_SUBSETS = frozenset(FACT_SUBSETS.keys())
