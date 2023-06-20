@@ -379,8 +379,9 @@ def main():
         instances.append(FACT_SUBSETS[key](module))
 
     for inst in instances:
-        inst.populate()
-        facts.update(inst.facts)
+        if inst:
+            inst.populate()
+            facts.update(inst.facts)
 
     ansible_facts = {}
     for key, value in iteritems(facts):
