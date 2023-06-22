@@ -1,0 +1,6 @@
+typ  prefix           metric  iface      hop          time
+DEF  0.0.0.0/0        0/2     ethernet1  172.16.1.35  1d18h
+C    172.16.0.0/23    0/0     ethernet1  null         1d18h
+REM  172.16.1.35/32   0/0     ethernet1  172.16.1.35  1d18h
+LOC  172.16.1.225/32  0/1     ethernet1  null         1d18h
+

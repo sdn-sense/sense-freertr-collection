@@ -1,0 +1,4 @@
+typ  prefix             metric  iface      hop   time
+C    10.255.255.0/24    0/0     ethernet2  null  1d18h
+LOC  10.255.255.254/32  0/1     ethernet2  null  1d18h
+

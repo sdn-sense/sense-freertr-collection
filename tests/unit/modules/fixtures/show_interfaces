@@ -1,0 +1,184 @@
+ethernet0 is up, promisc
+ description: CPU_PORT _NEVER_EVER_ CONFIGURE IT
+ state changed 3 times, last at 2023-06-21 00:45:08, 1d18h ago
+ last packet input 00:00:00 ago, output 00:00:10 ago, drop never ago
+ type is ethernet hwaddr is 0000.0bad.c0de mtu is 1500 bw is 100mbps
+ received 293405 packets (23603773 bytes) dropped 0 packets (0 bytes)
+ transmitted 15285 packets (1681350 bytes) macsec=false sgt=false
+ethernet1 is up
+ description: out of band management port
+ state changed 3 times, last at 2023-06-21 00:45:08, 1d18h ago
+ last packet input 00:00:00 ago, output 00:00:00 ago, drop 00:00:00 ago
+ type is ethernet hwaddr is 0001.0bad.c0de mtu is 1500 bw is 100mbps vrf is oob
+ ipv4 address is 172.16.1.225/23 ifcid=592440151
+ ipv6 address is fe80::201:bff:fead:c0de/64 ifcid=439886693
+ received 1535121 packets (200401050 bytes) dropped 1181718 packets (66067611 bytes)
+ transmitted 45682 packets (2406930 bytes) macsec=false sgt=false
+ethernet2 is up
+ description: linux tuntap management interface
+ state changed 3 times, last at 2023-06-21 00:45:08, 1d18h ago
+ last packet input 00:13:17 ago, output 00:02:10 ago, drop 00:13:17 ago
+ type is ethernet hwaddr is 0000.0bad.c0de mtu is 1500 bw is 100mbps vrf is lin
+ ipv4 address is 10.255.255.254/24 ifcid=519987292
+ received 56 packets (3344 bytes) dropped 56 packets (3344 bytes)
+ transmitted 849 packets (25470 bytes) macsec=false sgt=false
+sdn10 is down
+ description:
+ state changed 2 times, last at 2023-06-21 00:45:10, 1d18h ago
+ last packet input never ago, output never ago, drop never ago
+ type is sdn hwaddr is 0073.3204.2b5e mtu is 1500 bw is 8000kbps
+ received 0 packets (0 bytes) dropped 0 packets (0 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn11002 is down
+ description:
+ state changed 2 times, last at 2023-06-21 00:45:10, 1d18h ago
+rare#terminal length 0
+rare#
+rare#
+rare#
+rare#
+rare#
+rare#show interfaces
+ethernet0 is up, promisc
+ description: CPU_PORT _NEVER_EVER_ CONFIGURE IT
+ state changed 3 times, last at 2023-06-21 00:45:08, 1d18h ago
+ last packet input 00:00:00 ago, output 00:00:17 ago, drop never ago
+ type is ethernet hwaddr is 0000.0bad.c0de mtu is 1500 bw is 100mbps
+ received 293416 packets (23604698 bytes) dropped 0 packets (0 bytes)
+ transmitted 15285 packets (1681350 bytes) macsec=false sgt=false
+ethernet1 is up
+ description: out of band management port
+ state changed 3 times, last at 2023-06-21 00:45:08, 1d18h ago
+ last packet input 00:00:00 ago, output 00:00:00 ago, drop 00:00:00 ago
+ type is ethernet hwaddr is 0001.0bad.c0de mtu is 1500 bw is 100mbps vrf is oob
+ ipv4 address is 172.16.1.225/23 ifcid=592440151
+ ipv6 address is fe80::201:bff:fead:c0de/64 ifcid=439886693
+ received 1535267 packets (200413168 bytes) dropped 1181792 packets (66071533 bytes)
+ transmitted 45745 packets (2418408 bytes) macsec=false sgt=false
+ethernet2 is up
+ description: linux tuntap management interface
+ state changed 3 times, last at 2023-06-21 00:45:08, 1d18h ago
+ last packet input 00:13:25 ago, output 00:02:18 ago, drop 00:13:25 ago
+ type is ethernet hwaddr is 0000.0bad.c0de mtu is 1500 bw is 100mbps vrf is lin
+ ipv4 address is 10.255.255.254/24 ifcid=519987292
+ received 56 packets (3344 bytes) dropped 56 packets (3344 bytes)
+ transmitted 849 packets (25470 bytes) macsec=false sgt=false
+sdn10 is down
+ description:
+ state changed 2 times, last at 2023-06-21 00:45:10, 1d18h ago
+ last packet input never ago, output never ago, drop never ago
+ type is sdn hwaddr is 0073.3204.2b5e mtu is 1500 bw is 8000kbps
+ received 0 packets (0 bytes) dropped 0 packets (0 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn11002 is down
+ description:
+ state changed 2 times, last at 2023-06-21 00:45:10, 1d18h ago
+ last packet input never ago, output never ago, drop never ago
+ type is sdn hwaddr is 001d.1358.573b mtu is 1500 bw is 1000mbps
+ received 0 packets (0 bytes) dropped 0 packets (0 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn11006 is down
+ description:
+ state changed 2 times, last at 2023-06-21 00:45:10, 1d18h ago
+ last packet input never ago, output never ago, drop never ago
+ type is sdn hwaddr is 004e.7970.775a mtu is 1500 bw is 1000mbps
+ received 0 packets (0 bytes) dropped 0 packets (0 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn12000 is up
+ description:
+ state changed 3 times, last at 2023-06-21 00:45:52, 1d18h ago
+ last packet input 00:00:20 ago, output 00:00:17 ago, drop 1d18h ago
+ type is sdn hwaddr is 0009.170e.255b mtu is 1500 bw is 8000kbps
+ received 5095 packets (1294130 bytes) dropped 2 packets (216 bytes)
+ transmitted 5095 packets (550260 bytes) macsec=false sgt=false
+sdn12004 is up
+ description:
+ state changed 3 times, last at 2023-06-21 00:45:53, 1d18h ago
+ last packet input 00:00:13 ago, output 00:00:17 ago, drop 1d18h ago
+ type is sdn hwaddr is 0049.2129.526f mtu is 1500 bw is 8000kbps
+ received 5095 packets (1294130 bytes) dropped 3 packets (470 bytes)
+ transmitted 5095 packets (550260 bytes) macsec=false sgt=false
+sdn13000 is up
+ description:
+ state changed 3 times, last at 2023-06-21 00:45:53, 1d18h ago
+ last packet input 00:00:18 ago, output 00:00:17 ago, drop 1d18h ago
+ type is sdn hwaddr is 0010.5810.011e mtu is 1500 bw is 8000kbps
+ received 5095 packets (1289035 bytes) dropped 2 packets (216 bytes)
+ transmitted 5095 packets (550260 bytes) macsec=false sgt=false
+sdn13004 is down
+ description:
+ state changed 2 times, last at 2023-06-21 00:45:10, 1d18h ago
+ last packet input never ago, output never ago, drop never ago
+ type is sdn hwaddr is 002e.0c6d.6425 mtu is 1500 bw is 8000kbps
+ received 0 packets (0 bytes) dropped 0 packets (0 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn15 is up
+ description:
+ state changed 3 times, last at 2023-06-21 00:45:47, 1d18h ago
+ last packet input 00:00:00 ago, output never ago, drop 00:00:00 ago
+ type is sdn hwaddr is 0058.2156.5844 mtu is 1500 bw is 8000kbps
+ received 157120 packets (9207498 bytes) dropped 157120 packets (9207498 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn16 is down
+ description:
+ state changed 2 times, last at 2023-06-21 00:45:10, 1d18h ago
+ last packet input never ago, output never ago, drop never ago
+ type is sdn hwaddr is 0065.465a.6950 mtu is 1500 bw is 8000kbps
+ received 0 packets (0 bytes) dropped 0 packets (0 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn17 is down
+ description:
+ state changed 2 times, last at 2023-06-21 00:45:10, 1d18h ago
+ last packet input never ago, output never ago, drop never ago
+ type is sdn hwaddr is 0037.5e14.0163 mtu is 1500 bw is 8000kbps
+ received 0 packets (0 bytes) dropped 0 packets (0 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn22 is up
+ description:
+ state changed 3 times, last at 2023-06-21 00:45:52, 1d18h ago
+ last packet input 00:00:09 ago, output never ago, drop 00:00:09 ago
+ type is sdn hwaddr is 0073.5447.2324 mtu is 1500 bw is 8000kbps
+ received 40336 packets (3319445 bytes) dropped 40336 packets (3319445 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn23 is up
+ description:
+ state changed 3 times, last at 2023-06-21 00:45:51, 1d18h ago
+ last packet input 00:00:04 ago, output never ago, drop 00:00:04 ago
+ type is sdn hwaddr is 007c.6125.3b36 mtu is 1500 bw is 8000kbps
+ received 40339 packets (3319655 bytes) dropped 40339 packets (3319655 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn24 is up
+ description:
+ state changed 3 times, last at 2023-06-21 00:45:51, 1d18h ago
+ last packet input 00:00:09 ago, output never ago, drop 00:00:09 ago
+ type is sdn hwaddr is 007a.4005.404d mtu is 1500 bw is 8000kbps
+ received 40336 packets (3293973 bytes) dropped 40336 packets (3293973 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn25 is down
+ description:
+ state changed 2 times, last at 2023-06-21 00:45:10, 1d18h ago
+ last packet input never ago, output never ago, drop never ago
+ type is sdn hwaddr is 003b.0a4d.5c5a mtu is 1500 bw is 8000kbps
+ received 0 packets (0 bytes) dropped 0 packets (0 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn7 is down
+ description:
+ state changed 2 times, last at 2023-06-21 00:45:10, 1d18h ago
+ last packet input never ago, output never ago, drop never ago
+ type is sdn hwaddr is 0059.1f0b.0f10 mtu is 1500 bw is 8000kbps
+ received 0 packets (0 bytes) dropped 0 packets (0 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn8 is down
+ description:
+ state changed 2 times, last at 2023-06-21 00:45:10, 1d18h ago
+ last packet input never ago, output never ago, drop never ago
+ type is sdn hwaddr is 006c.5f56.374f mtu is 1500 bw is 8000kbps
+ received 0 packets (0 bytes) dropped 0 packets (0 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false
+sdn9 is down
+ description:
+ state changed 2 times, last at 2023-06-21 00:45:10, 1d18h ago
+ last packet input never ago, output never ago, drop never ago
+ type is sdn hwaddr is 0001.720c.4217 mtu is 1500 bw is 8000kbps
+ received 0 packets (0 bytes) dropped 0 packets (0 bytes)
+ transmitted 0 packets (0 bytes) macsec=false sgt=false

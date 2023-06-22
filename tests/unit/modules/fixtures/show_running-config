@@ -1,0 +1,314 @@
+hostname rare
+buggy
+!
+logging buffered debug 10240
+logging file debug /var/log/freertr.log
+logging rotate 655360000 /var/log/freertr.old
+!
+crypto rsakey rsa import $v10$TUlJRXBBSUJBQUtDQVFFDXZzL204anRPd3hMZGZnS3F6BTZtYmI2dVQ3MDVDTlBBN25QcklzdDVhbkRuVVVoazFBeDVGQmJwb3U2OVBEcE5JTzZRaHJGYWs1Z3YzR3BtdGlMUDdpeVNrQUpsWXVRK3VlNkFIUTAwRzRXTlUyL3VkeDZacmxBU2JtVEo0MlFhdzU3MldKRExPbFgyOGRteGMyb3BjMFQzRGMxQVZtVmNZRkZXRXBVYVlkWk5nczNwWjRsTzZKYW5VN2RKT1RCcEwwcjdUTGxGUDlYdjR4YndiOVVCQ0tsRFJWN3J1NkZpNmxjV0tUWW93RDNkaE1yQUJ3RjY4MXM4a2lreGFyaVBsNTQralVEMEhEaDF3K3cwU1lXZ2Y0bFI2SG5icDJBMlhWM0NOWEpDMVVwY0VCMEgwMkdGcmJzVklmN0VJMDR0M3JtL1EydGY0WVpVdUMyZkZEWnBnd0lEQVFBQkFvSUJBUUN5OGR5ZkxObUhmaWkwSlNJeWFrd1FQYlBSV2g2ajFacG94ZE10Rlc5dlVDVFBDTHB1VnFneUcrN04rMkVDbTVaN25OOXpRZDQwN3BOci9Xa0h4SXdGekUxQ3VzeUVPcE5NNFl2S012aThHcnBZRm0rbnpNM0pPSlNnYk9zYzBtTjdNNWZKcFRqQ0k1NXNYNERZUVNaUVVNdjBhSm0rckY0K2dlamJrbk5rYmV0T2tuclNMVmg4bzFjQlhsZjdVbmloTVZPSTVzRUc3LzFjcHlvNmx0VlFHTGNiUFZrSGxpeHJWOTNKMjc1YXNjdDlCcmllVWhDN2dFRUVCQ3Z4R0RvYXJBOUFGSGw1d1hwU1RhNGVXOTk2dVdSa0Rma3NiS0puMDMxaU9lZDJUTmZ4NFNvOWo4ellLRWprTXJhSE84K3dBM2JNQ3ZmZmgxRElIV2pLSzAwSkFvR0JBT3ljRFRrOGVnV2kwMVZjUmJBUTc0TUVtNE5nbDJuL3YyTThtb0FneVJhTVpybVhUbkZ2SitOMHVpVUQxZ3pKK3pLR09ZUEpaTG5ZeXl0bUJhdE8yVUVFeStMRVpHRTFyUlhFZWdwSmYrUlpvUHhicHZJNXdxVThuSzRON1RFa2pHejZXc051UExmRy9NQ1A3bXpKeVBJZTBRbUV5czdhdkxVV1VIcDY4VnB2QW9HQkFNNXpDd3BQUllvM2tIc1A1R3VKWnRsTUs0VFRTekErVUVscGpQRWZ4VkhWYk5iVUtYV3hOdDNSRW9CUnJMdHVQVmdRcmx3MFh2ZUZNbndDZ0pFMldad3hlSkdYTkdtT0x1Tzl3SEdpUHdRYnhpaHE5bzJJYnFBVldyaWV3KzJXNGdFQU9FMGptbjduVFJQQzgvTzV3dG1rYWVNdFQ2cFVDeklZMncrTW9Md3RBb0dBV0pOYXgvQ0I1Wlk4OHhtbDVQR1NHRVFqUzUxZlVZa3lScDRyWUlmbGY1Rno2MHBmVFV2RmJQc0hyRSt4VS94UkUycjRJUVBGdDJVWE9kbnBpV1h0SXMvKzI1ZVYxR1paczJwb0hXM0NlT09zeG93eEJVRG1ReUZicmpUOGRJY3dJcVBlVW9iMEtBQlFJbTQvWFc1MDBWOEQ5a0pHQWdZVTJ0M05wdXhiYWZVQ2dZQmxaakhzL1dSOWI2OGlFbnN4cWtuK3ZwKzlYSDVZa3JLaWJCcFNzRFVkYllOSXZPb2tLVWQyaVdMWjdjTzJSMzRQekJtbnBmMWkrMlFCYnNVeERZM1QzcVNHZGNyRGNaZHNPbDNVTWtsYlBqMEV5d3lRRll1b1N2VEZLdzIybTE0aitiU3RocWd5WG04SUhyL3RYTGJzYVFtdEVDdEowSCt6T213VjVnOW9mUUtCZ1FDSzQ2SWpYRkJOcTQ4akVhQ0x4N3l0SlVMWFVIcVR1aXhZZlNNcmRGYjJNSDE4Rld1L0Vab3M5dCtzU0dsOSt3ckVucCt2bklUL1Z5UENCSjhNcHM4amhxMEZrWWZLK0pnemZuem9UeklqQ2lBMFdTcnVLajYxOFlXTXhXN1FxWU9kTFc4VzZvaHVYRE9QQnkyWGl4dnBWYnhCUzMxM3Z3dHJlVkNCbGhSb0N3PT0=
+!
+crypto dsakey dsa import $v10$TUlJQnV3SUJBQDtCZ1FDTFR3RlVtY09HL0daOWtnZDZxbEJMeUp5E3BCdnBUcElyenhHc2hLNXdSUEJoTlhTSWlrbkxGV0J0NlI3V202RFF0SG9POGEzaVNOU25hOU9Bc3ZZSEhMT2VVTlg5VXRwSVl4TUdCSGdGTWg4dk1DL21BZFVnZi85cW9rdlpxZzRkeEVwckZCY09uczJldUw4Wkcrd2JVaTdqM2cybkthcGRFUzIwRzNQVlZ3SVZBS0NMcUxFTlZ6ZDVLTmpteklLWGRWVlY0WUFWQW9HQUE0dTdpVkJVOXNaaEc4Nk9HRmFUbE5TdDNLUDdkZHFKclN2NnpKcTFIQVFjaFgwbXliK1dXeVlkT0tjV2xDVFFYMjdmUWk0Rmhmc0VXWEVEMnlJSlVUZFhEVE12VXlvZnZTRzlrTHhqbGFsL2RmV3NFSWtMV0t4bHJGc3J1QVNXRTh2N2ltamZFUmtRRlJpaVBDU0dpNTAva3ZodmVtT3BIL2o3enZQSnQ4c0NnWUJLZDVIS1BLVW9ZRVpwLzZvVEFFaThpNEhZdFlwd0tOZEdMcHRqMFhiRzdENjBhTUZZOXRDY0hob3ZvYXRFa1FlL1pFajR2WnUxcnJkR2czK0lLVEhsRkZtd1dVNzlvWEV4NmJYd0d1VUZ4OEZ0eXgwU21KVXBvbGZyMnU3dEdFS1Y3MUFacklyTWZrby9JNWZ4eGhrbFNXTnI3cjRGdFZFemlHRTJOdjZXY0FJVkFOdGRVVjFNSXVoVDZzWmJQcnF3OXJ6MWJlTDM=
+!
+crypto ecdsakey ecdsa import $v10$TUhRQ0FRRUVJQURGc0MGVFFpcGNTUTlaRFFHNGhZQysrV1lGU3AzUWFkRHdLaEJETnJoSG9BY0dCU3VCQkFBS29VUURRZ0FFQmlpTzhQS0dtYkZPd2pZUU4rQ2owdWZPL2Z3Y3g4T3Y4eUpiMFdvcmF5dkNneFl1Q1pjYzVVZ0xMbW02VUJMQ0dhcHNEWjNyL2xjSXJld2VqNjM5Q3c9PQ==
+!
+aaa userlist usr
+ username rare
+ username rare password $v10$cdFyZQ==
+ exit
+!
+scheduler errors
+ time 600000
+ delay 30000
+ command clear errors freerror@nop.hu
+ start
+ exit
+!
+prefix-list all4
+ sequence 10 permit 0.0.0.0/0 ge 0 le 0
+ exit
+!
+prefix-list all6
+ sequence 10 permit ::/0 ge 0 le 0
+ exit
+!
+vrf definition lin
+ exit
+!
+vrf definition oob
+ exit
+!
+vrf definition p4
+ description P4 VRF _NEVER_EVER_ CONFIGURE IT
+ exit
+!
+interface ethernet0
+ description CPU_PORT _NEVER_EVER_ CONFIGURE IT
+ no shutdown
+ no log-link-change
+ exit
+!
+interface ethernet1
+ description out of band management port
+ macaddr 0001.0bad.c0de
+ vrf forwarding oob
+ ipv4 address dynamic dynamic
+ ipv4 gateway-prefix all4
+ ipv4 dhcp-client enable
+ ipv4 dhcp-client early
+ ipv6 address dynamic dynamic
+ ipv6 gateway-prefix all6
+ ipv6 slaac-client enable
+ ipv6 prefix-suppress
+ no shutdown
+ no log-link-change
+ exit
+!
+interface ethernet2
+ description linux tuntap management interface
+ vrf forwarding lin
+ ipv4 address 10.255.255.254 255.255.255.0
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn10
+ mtu 1500
+ macaddr 0073.3204.2b5e
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn11002
+ mtu 1500
+ macaddr 001d.1358.573b
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn11006
+ mtu 1500
+ macaddr 004e.7970.775a
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn12000
+ mtu 1500
+ macaddr 0009.170e.255b
+ lldp enable
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn12004
+ mtu 1500
+ macaddr 0049.2129.526f
+ lldp enable
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn13000
+ mtu 1500
+ macaddr 0010.5810.011e
+ lldp enable
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn13004
+ mtu 1500
+ macaddr 002e.0c6d.6425
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn15
+ mtu 1500
+ macaddr 0058.2156.5844
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn16
+ mtu 1500
+ macaddr 0065.465a.6950
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn17
+ mtu 1500
+ macaddr 0037.5e14.0163
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn22
+ mtu 1500
+ macaddr 0073.5447.2324
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn23
+ mtu 1500
+ macaddr 007c.6125.3b36
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn24
+ mtu 1500
+ macaddr 007a.4005.404d
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn25
+ mtu 1500
+ macaddr 003b.0a4d.5c5a
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn7
+ mtu 1500
+ macaddr 0059.1f0b.0f10
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn8
+ mtu 1500
+ macaddr 006c.5f56.374f
+ no shutdown
+ no log-link-change
+ exit
+!
+interface sdn9
+ mtu 1500
+ macaddr 0001.720c.4217
+ no shutdown
+ no log-link-change
+ exit
+!
+console0
+ no exec authorization
+ no login authentication
+ exit
+!
+proxy-profile oob
+ vrf oob
+ exit
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+alias exec tna-set-profile sticky-param PE
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+server telnet oob
+ security authentication usr
+ security rsakey rsa
+ security dsakey dsa
+ security ecdsakey ecdsa
+ second-port 22
+ exec logging
+ no exec authorization
+ login authentication usr
+ login logging
+ vrf oob
+ exit
+!
+server telnet p4
+ security protocol telnet
+ exec logging
+ no exec authorization
+ no login authentication
+ login logging
+ vrf p4
+ exit
+!
+server p4lang p4
+ export-port sdn25 56 100 0 1 0
+ export-port sdn7 184 100 3 1 0
+ export-port sdn8 192 100 3 1 0
+ export-port sdn16 264 400 3 2 0
+ export-port sdn15 272 400 3 0 0
+ export-port sdn13000 288 100 3 1 0
+ export-port sdn13004 292 100 3 1 0
+ export-port sdn12000 296 100 3 1 0
+ export-port sdn12004 300 100 3 1 0
+ export-port sdn10 312 100 3 1 0
+ export-port sdn9 320 100 3 1 0
+ export-port sdn17 400 400 3 2 0
+ export-port sdn22 424 100 0 1 0
+ export-port sdn24 440 100 3 1 0
+ export-port sdn23 448 100 0 1 0
+ interconnect ethernet0
+ vrf p4
+ exit
+!
+client proxy oob
+client name-server 1.1.1.1
+client time-server europe.pool.ntp.org
+client time-zone CET
+!
+end
+

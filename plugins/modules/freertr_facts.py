@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright: Contributors to the Ansible project
@@ -12,7 +12,8 @@ from ansible_collections.rare.freertr.plugins.module_utils.network.freertr impor
 
 display = Display()
 
-class FactsBase():
+
+class FactsBase:
     """Base class for Facts"""
 
     COMMANDS = []
@@ -78,7 +79,7 @@ class Hardware(FactsBase):
     def populate(self):
         super(Hardware, self).populate()
         data = self.responses[0]
-        match= re.search(r'^mem: \S+=(\S+), \S+=(\S+), \S+=(\S+)', data, re.M)
+        match = re.search(r'^mem: \S+=(\S+), \S+=(\S+), \S+=(\S+)', data, re.M)
         if match:
             self.facts['memfree_mb'] = match[1]
             self.facts['memtotal_mb'] = match[2]
@@ -110,6 +111,7 @@ class Interfaces(FactsBase):
         for intfName, intfDict in interfaceData.items():
             tmpD = self.facts['interfaces'].setdefault(intfName, {})
             tmpD['state'] = intfDict['state']
+            tmpD['unparsed'] = "\n".join(intfDict['unparsed'])
             unpLines = "\n".join(intfDict['unparsed'])
             tmpD['description'] = self.parseDesc(unpLines)
             tmpD['type'] = self.parseType(unpLines)
@@ -153,7 +155,7 @@ class Interfaces(FactsBase):
             match = re.search(r'peer *(\S+)$', line, re.M)
             if match:
                 macaddr = match.group(1).strip().replace('.', '')
-                split_mac = [macaddr[index : index + 2] for index in range(0, len(macaddr), 2)]
+                split_mac = [macaddr[index: index + 2] for index in range(0, len(macaddr), 2)]
                 out['remote_chassis_id'] = ":".join(split_mac)
             match = re.search(r'port id *([^$]*)$', line, re.M)
             if match:
@@ -161,8 +163,8 @@ class Interfaces(FactsBase):
         return out
 
     @staticmethod
-    def populateIPv6Addresses(data):
-        """Get all IPv6 address info"""
+    def _getIP(data):
+        """Get IP address info"""
         out = []
         for line in data.split('\n'):
             splLine = list(filter(None, line.split(' ')))
@@ -173,24 +175,19 @@ class Interfaces(FactsBase):
                 out.append('%s/%s' % (splLine[2], splLine[3]))
         return out
 
-    @staticmethod
-    def populateIPv4Addresses(data):
-        """Get all IPv4 address info"""
-        out = []
-        for line in data.split('\n'):
-            splLine = list(filter(None, line.split(' ')))
-            if len(splLine) == 4:
-                if splLine[0] == 'interface':
-                    continue
-                out.append('%s/%s' % (splLine[2], splLine[3]))
-        return out
+    def populateIPv6Addresses(self, data):
+        """Get all IPv6 address info"""
+        return self._getIP(data)
 
+    def populateIPv4Addresses(self, data):
+        """Get all IPv4 address info"""
+        return self._getIP(data)
 
     @staticmethod
     def parseIpv6(data):
         """Parse IPv6 address from output"""
         #  ipv6 address=fd00:67:7e69::a:8:e:2/120, mask=ffff:ffff:ffff:ffff:ffff:ffff:ffff:ff00, ifcid=325883999
-        match = re.search(r'ipv6 address=([^ ,]*)', data, re.M)
+        match = re.search(r'ipv6 address is ([^ ,]*)', data, re.M)
         if match:
             return match.group(1).strip()
         return ""
@@ -199,7 +196,7 @@ class Interfaces(FactsBase):
     def parseIpv4(data):
         """Parse IPv4 address from output"""
         #  ipv4 address=10.8.14.2/24, mask=255.255.255.0, ifcid=684917826
-        match = re.search(r'ipv4 address=([^ ,]*)', data, re.M)
+        match = re.search(r'ipv4 address is ([^ ,]*)', data, re.M)
         if match:
             return match.group(1).strip()
         return ""
@@ -208,7 +205,7 @@ class Interfaces(FactsBase):
     def parseVrf(data):
         """Parse vrf from output"""
         #  type is sdn, hwaddr=0015.180b.6038, mtu=1496, bw=8000kbps, vrf=CORE
-        match = re.search(r'vrf=([^ ,]*)', data, re.M)
+        match = re.search(r'vrf is ([^ ,]*)', data, re.M)
         if match:
             return match.group(1).strip()
         return ""
@@ -217,7 +214,7 @@ class Interfaces(FactsBase):
     def parseBW(data):
         """Parse bw from output"""
         #  type is sdn, hwaddr=0015.180b.6038, mtu=1496, bw=8000kbps, vrf=CORE
-        match = re.search(r'bw=([^ ,]*)', data, re.M)
+        match = re.search(r'bw is ([^ ,]*)', data, re.M)
         if match:
             speed = match.group(1).strip()
             if speed.endswith('kbps'):
@@ -232,19 +229,19 @@ class Interfaces(FactsBase):
     def parseMTU(data):
         """Parse mtu from output"""
         #  type is sdn, hwaddr=0015.180b.6038, mtu=1496, bw=8000kbps, vrf=CORE
-        match = re.search(r'mtu=([^ ,]*)', data, re.M)
+        match = re.search(r'mtu is ([^ ,]*)', data, re.M)
         if match:
-            return match.group(1).strip()
-        return ""
+            return int(match.group(1).strip())
+        return 0
 
     @staticmethod
     def parseHwaddr(data):
         """Parse hwaddr from output"""
         #  type is sdn, hwaddr=0015.180b.6038, mtu=1496, bw=8000kbps, vrf=CORE
-        match = re.search(r'hwaddr=([^ ,]*)', data, re.M)
+        match = re.search(r'hwaddr is ([^ ,]*)', data, re.M)
         if match and match.group(1).strip() != 'none':
             macaddr = match.group(1).strip().replace('.', '')
-            split_mac = [macaddr[index : index + 2] for index in range(0, len(macaddr), 2)]
+            split_mac = [macaddr[index: index + 2] for index in range(0, len(macaddr), 2)]
             return ":".join(split_mac)
         return ""
 
@@ -273,10 +270,10 @@ class Interfaces(FactsBase):
 
         for line in data.split('\n'):
             if line:
-                if line.startswith(' '):
+                if line.startswith(' ') and intName:
                     parsed[intName]['unparsed'].append(line)
                 else:
-                    match = re.match(r'^(\S+) is (\S+)$', line)
+                    match = re.match(r'^([a-zA-Z0-9]+) is ([a-zA-Z]+),? ?(promisc)?.*', line)
                     if match:
                         intName = match[1]
                         parsed.setdefault(intName, {'state': match[2], 'unparsed': []})
@@ -313,6 +310,8 @@ class Routing(FactsBase):
         """Get and Parse all vrfs for iptype (ipv4/ipv6)"""
         out.setdefault(iptype, [])
         for vrf in vrfs:
+            if not vrf:
+                continue
             vrfInfo = self.run([f"show {iptype} route {vrf}"])
             keys = []
             lineNum = 0
@@ -326,6 +325,7 @@ class Routing(FactsBase):
                 tmpDict['vrf'] = vrf
                 out[iptype].append(tmpDict)
         return out
+
 
 FACT_SUBSETS = {'default': Default,
                 'hardware': Hardware,
@@ -371,8 +371,7 @@ def main():
     runable_subsets.difference_update(exclude_subsets)
     runable_subsets.add('default')
 
-    facts = {}
-    facts['gather_subset'] = [runable_subsets]
+    facts = {'gather_subset': [runable_subsets]}
 
     instances = []
     for key in runable_subsets:

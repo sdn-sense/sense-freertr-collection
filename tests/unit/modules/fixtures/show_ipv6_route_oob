@@ -1,0 +1,4 @@
+typ  prefix                       metric  iface      hop   time
+C    fe80::/64                    0/0     ethernet1  null  1d19h
+LOC  fe80::201:bff:fead:c0de/128  0/1     ethernet1  null  1d19h
+

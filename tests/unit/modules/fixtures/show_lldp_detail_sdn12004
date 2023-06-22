@@ -1,0 +1,14 @@
+category     value
+
+peer         b859.9fed.2252
+system name  sdn-sc-06.ultra.org
+port id      b859.9fed.2252
+port desc    mlx6p2s1
+ipv4 addr    172.16.0.116
+ipv6 addr    2601:d9c0:2:10::1:16
+mac addr     null
+system desc  AlmaLinux 8.7 (Stone Smilodon) Linux 6.1.11-1.el8.elrepo.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Feb  8 17:46:25 EST 2023 x86_64
+ttl          120000
+sys capa     oth rep BRDG AP RTR tel cab STAT
+cfg capa     oth rep BRDG ap RTR tel cab stat
+

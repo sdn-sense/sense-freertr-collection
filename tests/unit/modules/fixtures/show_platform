@@ -1,0 +1,18 @@
+freeRouter v23.4.21-cur, done by cs@nop.
+
+name: rare
+hwid: accton_as9516_32d
+hwsn: null
+uptime: since 2023-06-21 00:45:11, for 1d18h
+reload: code#3=user requested
+rwpath: /etc/freertr/
+hwcfg: /etc/freertr/rtr-hw.txt
+swcfg: /etc/freertr/rtr-sw.txt
+cpu: 8*amd64
+mem: free=100m, max=2147m, used=306m
+host: Linux v5.10.0-8-amd64
+java: N/A v17.0.3 @ /nix/store/xj55la7cmgnxvh1932lgj07ilyli4a7c-openjdk-headless-minimal-jre-17.0.3+7
+jspec: Oracle Corporation (Java Platform API Specification) v17
+vm: Oracle Corporation (OpenJDK 64-Bit Server VM) v17.0.3+7-nixos
+vmspec: Oracle Corporation (Java Virtual Machine Specification) v17
+class: v61.0 @ /nix/store/rn7d41dsjxn3n64gx4vgnx4x5if74q2y-freerouter-jar-23.4.21/rtr.jar

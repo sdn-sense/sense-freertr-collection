@@ -1,0 +1,5 @@
+           ifc     uni     mlt     flw     lab     con
+name  rd   v4  v6  v4  v6  v4  v6  v4  v6  v4  v6  v4  v6
+lin   0:0  1   0   2   0   2   0   0   0   0   0   1   0
+oob   0:0  1   1   4   2   4   2   0   0   0   0   2   1
+p4    0:0  0   0   0   0   0   0   0   0   0   0   0   0

@@ -1,0 +1,5 @@
+interface  hostname                  iface           ipv4          ipv6
+sdn12000   sdn-sc-05.ultra.org  b859.9fed.298e  172.16.0.115  2601:d9c0:2:10::1:15
+sdn12004   sdn-sc-06.ultra.org  b859.9fed.2252  172.16.0.116  2601:d9c0:2:10::1:16
+sdn13000   neu-sc-01.ultra.org  b859.9fed.2a02  172.16.0.117  2601:d9c0:2:10::1:17
+

@@ -1,0 +1,4 @@
+interface  state  address         netmask
+ethernet1  up     172.16.1.225    255.255.254.0
+ethernet2  up     10.255.255.254  255.255.255.0
+
