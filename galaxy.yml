@@ -9,7 +9,7 @@ license_file: LICENCE
 tags: [RARE, freeRTR, networking, P4]
 dependencies:
   ansible.netcommon: '>=1.0.0'
-repository: https://github.com/sdn-sense/rare-freertr-collection
-documentation: https://github.com/sdn-sense/rare-freertr-collection
-homepage: https://github.com/sdn-sense/rare-freertr-collection
-issues: https://github.com/sdn-sense/rare-freertr-collection
+repository: https://github.com/sdn-sense/sense-freertr-collection
+documentation: https://github.com/sdn-sense/sense-freertr-collection
+homepage: https://github.com/sdn-sense/sense-freertr-collection
+issues: https://github.com/sdn-sense/sense-freertr-collection

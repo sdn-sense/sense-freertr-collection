@@ -1,9 +1,9 @@
 plugin_routing:
   action:
     freertr_config:
-      redirect: rare.freertr.freertr
+      redirect: sense.freertr.freertr
     freertr_command:
-      redirect: rare.freertr.freertr
+      redirect: sense.freertr.freertr
     freertr_facts:
-      redirect: rare.freertr.freertr
+      redirect: sense.freertr.freertr
 

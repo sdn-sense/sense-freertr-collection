@@ -16,7 +16,7 @@ class Cliconf(CliconfBase):
         """Get Device Info"""
         devInfo = {}
 
-        devInfo['network_os'] = 'rare.freertr.freertr'
+        devInfo['network_os'] = 'sense.freertr.freertr'
         reply = self.get('show platform')
         data = to_text(reply, errors='surrogate_or_strict').strip()
 

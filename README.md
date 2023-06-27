@@ -1,4 +1,4 @@
-# Ansible Collection - rare.freertr
+# Ansible Collection - sense.freertr
 
 Documentation for the collection.
 

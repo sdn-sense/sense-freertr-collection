@@ -12,7 +12,7 @@ from ansible.module_utils._text import to_text
 from ansible.module_utils.connection import Connection
 from ansible_collections.ansible.netcommon.plugins.action.network import ActionModule as ActionNetworkModule
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import load_provider
-from ansible_collections.rare.freertr.plugins.module_utils.network.freertr import freertr_provider_spec
+from ansible_collections.sense.freertr.plugins.module_utils.network.freertr import freertr_provider_spec
 
 display = Display()
 
@@ -36,7 +36,7 @@ class ActionModule(ActionNetworkModule):
             provider = load_provider(freertr_provider_spec, self._task.args)
             plc = copy.deepcopy(self._play_context)
             plc.connection = 'network_cli'
-            plc.network_os = 'rare.freertr.freertr'
+            plc.network_os = 'sense.freertr.freertr'
             plc.remote_addr = provider['host'] or self._play_context.remote_addr
             plc.port = int(provider['port'] or self._play_context.port or 22)
             plc.remote_user = provider['username'] or self._play_context.connection_user

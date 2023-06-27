@@ -8,8 +8,8 @@ import time
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six import string_types
 from ansible.utils.display import Display
-from ansible_collections.rare.freertr.plugins.module_utils.network.freertr import run_commands
-from ansible_collections.rare.freertr.plugins.module_utils.network.freertr import freertr_argument_spec, check_args
+from ansible_collections.sense.freertr.plugins.module_utils.network.freertr import run_commands
+from ansible_collections.sense.freertr.plugins.module_utils.network.freertr import freertr_argument_spec, check_args
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import ComplexList
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.parsing import Conditional
 

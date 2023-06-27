@@ -5,9 +5,9 @@ __metaclass__ = type
 import json
 
 from unittest.mock import *
-from ansible_collections.rare.freertr.tests.unit.modules.freertr_module import TestFreeRTRModule, load_fixture
-from ansible_collections.rare.freertr.tests.unit.modules.freertr_module import set_module_args
-from ansible_collections.rare.freertr.plugins.modules import freertr_facts
+from ansible_collections.sense.freertr.tests.unit.modules.freertr_module import TestFreeRTRModule, load_fixture
+from ansible_collections.sense.freertr.tests.unit.modules.freertr_module import set_module_args
+from ansible_collections.sense.freertr.plugins.modules import freertr_facts
 
 
 class TestFreeRTRFacts(TestFreeRTRModule):
@@ -18,7 +18,7 @@ class TestFreeRTRFacts(TestFreeRTRModule):
         super(TestFreeRTRFacts, self).setUp()
 
         self.mock_run_command = patch(
-            'ansible_collections.rare.freertr.plugins.modules.freertr_facts.run_commands')
+            'ansible_collections.sense.freertr.plugins.modules.freertr_facts.run_commands')
         self.run_commands = self.mock_run_command.start()
 
     def tearDown(self):
@@ -97,7 +97,7 @@ class TestFreeRTRFacts(TestFreeRTRModule):
         self.assertIn("remote_port_id", ansible_facts['ansible_net_neighbors']['sdn12000'])
         self.assertEquals("b859.9fed.298e", ansible_facts['ansible_net_neighbors']['sdn12000']['remote_port_id'])
         self.assertIn("remote_system_name", ansible_facts['ansible_net_neighbors']['sdn12000'])
-        self.assertEquals("sdn-sc-05.ultralight.org", ansible_facts['ansible_net_neighbors']['sdn12000']['remote_system_name'])
+        self.assertEquals("sdn-sc-05.ultra.org", ansible_facts['ansible_net_neighbors']['sdn12000']['remote_system_name'])
 
         self.assertIn('ansible_net_all_ipv4_addresses', ansible_facts)
         self.assertIn('172.16.1.225/255.255.254.0', ansible_facts['ansible_net_all_ipv4_addresses'])
@@ -109,5 +109,5 @@ class TestFreeRTRFacts(TestFreeRTRModule):
         result = self.execute_module()
         ansible_facts = result['ansible_facts']
         self.assertIn('ansible_net_routing', ansible_facts)
-        self.assertEquals("ipv4", ansible_facts['ansible_net_routing'])
-        self.assertEquals("ipv6", ansible_facts['ansible_net_routing'])
+        self.assertIn("ipv4", ansible_facts['ansible_net_routing'])
+        self.assertIn("ipv6", ansible_facts['ansible_net_routing'])

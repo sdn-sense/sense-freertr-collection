@@ -7,8 +7,8 @@ import re
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six import iteritems
 from ansible.utils.display import Display
-from ansible_collections.rare.freertr.plugins.module_utils.network.freertr import run_commands
-from ansible_collections.rare.freertr.plugins.module_utils.network.freertr import freertr_argument_spec, check_args
+from ansible_collections.sense.freertr.plugins.module_utils.network.freertr import run_commands
+from ansible_collections.sense.freertr.plugins.module_utils.network.freertr import freertr_argument_spec, check_args
 
 display = Display()
 
