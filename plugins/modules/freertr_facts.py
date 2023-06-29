@@ -70,6 +70,15 @@ class Default(FactsBase):
             return match.group(1)
         return ""
 
+class Config(FactsBase):
+    """Default Class to get basic info"""
+    COMMANDS = [
+        'show running-config',
+    ]
+
+    def populate(self):
+        super(Config, self).populate()
+        self.facts['config'] = self.responses[0]
 
 class Interfaces(FactsBase):
     """All Interfaces Class"""
@@ -333,7 +342,8 @@ class Routing(FactsBase):
 
 FACT_SUBSETS = {'default': Default,
                 'interfaces': Interfaces,
-                'routing': Routing}
+                'routing': Routing,
+                'config': Config}
 
 VALID_SUBSETS = frozenset(FACT_SUBSETS.keys())
 
