@@ -4,6 +4,7 @@
 # Copyright: Contributors to the Ansible project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 import re
+from netaddr import IPAddress
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six import iteritems
 from ansible.utils.display import Display
@@ -70,32 +71,6 @@ class Default(FactsBase):
         return ""
 
 
-class Hardware(FactsBase):
-    """Hardware Information Class"""
-    COMMANDS = [
-        'show platform',
-    ]
-
-    def populate(self):
-        super(Hardware, self).populate()
-        data = self.responses[0]
-        match = re.search(r'^mem: \S+=(\S+), \S+=(\S+), \S+=(\S+)', data, re.M)
-        if match:
-            self.facts['memfree_mb'] = match[1]
-            self.facts['memtotal_mb'] = match[2]
-            self.facts['memused_mb'] = match[3]
-        # cpu: 16*amd64
-
-
-class Config(FactsBase):
-    """Configuration info Class"""
-    COMMANDS = ['show running-config']
-
-    def populate(self):
-        super(Config, self).populate()
-        self.facts['config'] = self.responses[0]
-
-
 class Interfaces(FactsBase):
     """All Interfaces Class"""
     COMMANDS = ['show interfaces',
@@ -106,32 +81,30 @@ class Interfaces(FactsBase):
     def populate(self):
         super(Interfaces, self).populate()
 
-        self.facts['interfaces'] = {}
+        self.facts.setdefault('interfaces', {})
+        self.facts.setdefault('info', {'macs': []})
         interfaceData = self.parseInterfaces(self.responses[0])
         for intfName, intfDict in interfaceData.items():
             tmpD = self.facts['interfaces'].setdefault(intfName, {})
-            tmpD['state'] = intfDict['state']
-            tmpD['unparsed'] = "\n".join(intfDict['unparsed'])
+            tmpD['operstatus'] = intfDict['operstatus']
             unpLines = "\n".join(intfDict['unparsed'])
             tmpD['description'] = self.parseDesc(unpLines)
-            tmpD['type'] = self.parseType(unpLines)
-            tmpD['mac'] = self.parseHwaddr(unpLines)
+            # display.vvv(str(unpLines))
+            # tmpD['type'] = self.parseType(unpLines)
+            tmpD['macaddress'] = self.parseHwaddr(unpLines)
+            if tmpD['macaddress'] and tmpD['macaddress'] not in self.facts['info']['macs']:
+                self.facts['info']['macs'].append(tmpD['macaddress'])
             tmpD['mtu'] = self.parseMTU(unpLines)
-            tmpD['speed'] = self.parseBW(unpLines)
-            tmpD['vrf'] = self.parseVrf(unpLines)
-            # TODO: It could be multiple IPs. Need to test and identify that
-            tmpD['ipv4'] = self.parseIpv4(unpLines)
-            tmpD['ipv6'] = self.parseIpv6(unpLines)
-            # If interface is vlan it will have name sdn1.3600
-            # Identifying vlan id.
-            match = re.search(r'\S+\.([0-9]*)', intfName, re.M)
-            if match:
-                tmpD['vlanid'] = match.group(1)
+            tmpD['bandwidth'] = self.parseBW(unpLines)
+            splIntf = intfName.split('.')
+            if len(splIntf) == 2:
+                self.facts['interfaces'][intfName].setdefault('tagged', [])
+                self.facts['interfaces'][intfName]['tagged'].append(splIntf[0])
 
-        self.facts['all_ipv4_addresses'] = self.populateIPv4Addresses(self.responses[1])
-        self.facts['all_ipv6_addresses'] = self.populateIPv4Addresses(self.responses[2])
+        self.populateIPs(self.responses[1].split('\n'), 'ipv4')
+        self.populateIPs(self.responses[2].split('\n'), 'ipv6')
 
-        self.facts['neighbors'] = self.populateLLDPInfo(self.responses[3])
+        self.facts['lldp'] = self.populateLLDPInfo(self.responses[3])
 
     def populateLLDPInfo(self, data):
         """Get all lldp information"""
@@ -147,6 +120,23 @@ class Interfaces(FactsBase):
 
     def getLLDPIntfInfo(self, splLine):
         """Get lldp info of specific interface"""
+        def checkIfMac(inEntry):
+            """ FreeRTR Check if return value is mac. It returns weird state"""
+            # "b859.9fed.2bee"
+            tmp = inEntry.split('.')
+            if len(tmp) != 3:
+                return False
+            for item in tmp:
+                if len(item) != 4:
+                    return False
+            return True
+
+        def normalizeMac(input):
+            """Normalize mac to normal format"""
+            macaddr = input.strip().replace('.', '')
+            split_mac = [macaddr[index: index + 2] for index in range(0, len(macaddr), 2)]
+            return ":".join(split_mac)
+
         out = {'remote_system_name': splLine[1], 'local_port_id': splLine[0]}
         lldpInfo = self.run(["show lldp detail %s" % splLine[0]])
         for line in lldpInfo[0].split('\n'):
@@ -154,34 +144,35 @@ class Interfaces(FactsBase):
                 continue
             match = re.search(r'peer *(\S+)$', line, re.M)
             if match:
-                macaddr = match.group(1).strip().replace('.', '')
-                split_mac = [macaddr[index: index + 2] for index in range(0, len(macaddr), 2)]
-                out['remote_chassis_id'] = ":".join(split_mac)
+                out['remote_chassis_id'] = normalizeMac(match.group(1))
             match = re.search(r'port id *([^$]*)$', line, re.M)
             if match:
-                out['remote_port_id'] = match.group(1).strip()
+                tmpout = match.group(1).strip()
+                if checkIfMac(tmpout):
+                    tmpout = normalizeMac(tmpout)
+                out['remote_port_id'] = tmpout
         return out
 
     @staticmethod
     def _getIP(data):
         """Get IP address info"""
-        out = []
-        for line in data.split('\n'):
+        out = {}
+        for line in data:
             splLine = list(filter(None, line.split(' ')))
             if len(splLine) == 4:
                 if splLine[0] == 'interface':
                     # Ignore first line
                     continue
-                out.append('%s/%s' % (splLine[2], splLine[3]))
+                out[splLine[0]] = {'address': splLine[2],
+                                   'masklen': IPAddress(splLine[3]).netmask_bits()}
         return out
 
-    def populateIPv6Addresses(self, data):
-        """Get all IPv6 address info"""
-        return self._getIP(data)
-
-    def populateIPv4Addresses(self, data):
-        """Get all IPv4 address info"""
-        return self._getIP(data)
+    def populateIPs(self, data, iptype):
+        """Populate IPs in interfaces output"""
+        for intName, intDict in self._getIP(data).items():
+            if intName in self.facts['interfaces']:
+                self.facts['interfaces'][intName].setdefault(iptype, [])
+                self.facts['interfaces'][intName][iptype].append(intDict)
 
     @staticmethod
     def parseIpv6(data):
@@ -214,35 +205,41 @@ class Interfaces(FactsBase):
     def parseBW(data):
         """Parse bw from output"""
         #  type is sdn, hwaddr=0015.180b.6038, mtu=1496, bw=8000kbps, vrf=CORE
-        match = re.search(r'bw is ([^ ,]*)', data, re.M)
-        if match:
-            speed = match.group(1).strip()
-            if speed.endswith('kbps'):
-                return int(speed[:-4]) // 1000
-            if speed.endswith('mbps'):
-                return int(speed[:-4])
-            if speed.endswith('gbps'):
-                return int(speed[:-4]) * 1000
-        return ""
+        #  type is ethernet, hwaddr=0000.0bad.c0de, mtu=1500, bw=100mbps, vrf=oob
+        for reg in [r'bw is ([^ ,]*)', r'bw=([^ ,]*)']:
+            match = re.search(reg, data, re.M)
+            if match:
+                speed = match.group(1).strip()
+                if speed.endswith('kbps'):
+                    return int(speed[:-4]) // 1000000
+                if speed.endswith('mbps'):
+                    return int(speed[:-4]) // 1000
+                if speed.endswith('gbps'):
+                    return int(speed[:-4])
+        return 0
 
     @staticmethod
     def parseMTU(data):
         """Parse mtu from output"""
         #  type is sdn, hwaddr=0015.180b.6038, mtu=1496, bw=8000kbps, vrf=CORE
-        match = re.search(r'mtu is ([^ ,]*)', data, re.M)
-        if match:
-            return int(match.group(1).strip())
+        #  type is ethernet, hwaddr=0000.0bad.c0de, mtu=1500, bw=100mbps, vrf=oob
+        for reg in [r'mtu is ([^ ,]*)', r'mtu=([^ ,]*)']:
+            match = re.search(reg, data, re.M)
+            if match:
+                return int(match.group(1).strip())
         return 0
 
     @staticmethod
     def parseHwaddr(data):
         """Parse hwaddr from output"""
         #  type is sdn, hwaddr=0015.180b.6038, mtu=1496, bw=8000kbps, vrf=CORE
-        match = re.search(r'hwaddr is ([^ ,]*)', data, re.M)
-        if match and match.group(1).strip() != 'none':
-            macaddr = match.group(1).strip().replace('.', '')
-            split_mac = [macaddr[index: index + 2] for index in range(0, len(macaddr), 2)]
-            return ":".join(split_mac)
+        #  type is ethernet, hwaddr=0000.0bad.c0de, mtu=1500, bw=100mbps, vrf=oob
+        for reg in [r'hwaddr is ([^ ,]*)', r'hwaddr=([^ ,]*)?']:
+            match = re.search(reg, data, re.M)
+            if match and match.group(1).strip() != 'none':
+                macaddr = match.group(1).strip().replace('.', '')
+                split_mac = [macaddr[index: index + 2] for index in range(0, len(macaddr), 2)]
+                return ":".join(split_mac)
         return ""
 
     @staticmethod
@@ -273,10 +270,10 @@ class Interfaces(FactsBase):
                 if line.startswith(' ') and intName:
                     parsed[intName]['unparsed'].append(line)
                 else:
-                    match = re.match(r'^([a-zA-Z0-9]+) is ([a-zA-Z]+),? ?(promisc)?.*', line)
+                    match = re.match(r'^([a-zA-Z0-9.]+) is ([a-zA-Z]+),? ?(promisc)?.*', line)
                     if match:
                         intName = match[1]
-                        parsed.setdefault(intName, {'state': match[2], 'unparsed': []})
+                        parsed.setdefault(intName, {'operstatus': match[2], 'unparsed': []})
         return parsed
 
 
@@ -288,7 +285,14 @@ class Routing(FactsBase):
 
     def populate(self):
         super(Routing, self).populate()
-        self.facts['routing'] = self.parserouting(self.responses[0])
+        parsedRoutes = self.parserouting(self.responses[0])
+        for key, vals in parsedRoutes.items():
+            self.facts.setdefault(key, [])
+            for item in vals:
+                tmpout = {'vrf': item['vrf'], 'intf': item['iface'], 'from': item['prefix']}
+                if item['hop'] != 'null':
+                    tmpout['to'] = item['hop']
+                self.facts[key].append(tmpout)
 
     def parserouting(self, data):
         """Parse routing"""
@@ -328,10 +332,8 @@ class Routing(FactsBase):
 
 
 FACT_SUBSETS = {'default': Default,
-                'hardware': Hardware,
                 'interfaces': Interfaces,
-                'routing': Routing,
-                'config': Config}
+                'routing': Routing}
 
 VALID_SUBSETS = frozenset(FACT_SUBSETS.keys())
 
