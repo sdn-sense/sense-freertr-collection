@@ -4,6 +4,7 @@
 # Copyright: Contributors to the Ansible project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 import re
+import traceback
 from netaddr import IPAddress
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six import iteritems
@@ -70,6 +71,7 @@ class Default(FactsBase):
             return match.group(1)
         return ""
 
+
 class Config(FactsBase):
     """Default Class to get basic info"""
     COMMANDS = [
@@ -79,6 +81,7 @@ class Config(FactsBase):
     def populate(self):
         super(Config, self).populate()
         self.facts['config'] = self.responses[0]
+
 
 class Interfaces(FactsBase):
     """All Interfaces Class"""

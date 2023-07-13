@@ -51,8 +51,6 @@ class TestFreeRTRFacts(TestFreeRTRModule):
         set_module_args(dict())
         result = self.execute_module()
         ansible_facts = result['ansible_facts']
-        import pprint
-        pprint.pprint(ansible_facts)
         self.assertEquals('rare', ansible_facts['ansible_net_hostname'])
         self.assertEquals('accton_as9516_32d', ansible_facts['ansible_net_hwid'])
         self.assertEquals('v23.4.21-cur', ansible_facts['ansible_net_version'])
@@ -69,8 +67,6 @@ class TestFreeRTRFacts(TestFreeRTRModule):
         set_module_args({'gather_subset': 'config'})
         result = self.execute_module()
         ansible_facts = result['ansible_facts']
-        import pprint
-        pprint.pprint(ansible_facts)
         self.assertIn('ansible_net_config', ansible_facts)
 
     def test_freertr_facts_gather_subset_interfaces(self):
@@ -89,15 +85,15 @@ class TestFreeRTRFacts(TestFreeRTRModule):
         self.assertEquals("up", ansible_facts['ansible_net_interfaces']['ethernet1']['state'])
         self.assertEquals("oob", ansible_facts['ansible_net_interfaces']['ethernet1']['vrf'])
         self.assertIn('ansible_net_neighbors', ansible_facts)
-        self.assertIn("sdn12000", ansible_facts['ansible_net_neighbors'])
-        self.assertIn("local_port_id", ansible_facts['ansible_net_neighbors']['sdn12000'])
-        self.assertEquals("sdn12000", ansible_facts['ansible_net_neighbors']['sdn12000']['local_port_id'])
-        self.assertIn("remote_chassis_id", ansible_facts['ansible_net_neighbors']['sdn12000'])
-        self.assertEquals("b8:59:9f:ed:29:8e", ansible_facts['ansible_net_neighbors']['sdn12000']['remote_chassis_id'])
-        self.assertIn("remote_port_id", ansible_facts['ansible_net_neighbors']['sdn12000'])
-        self.assertEquals("b859.9fed.298e", ansible_facts['ansible_net_neighbors']['sdn12000']['remote_port_id'])
-        self.assertIn("remote_system_name", ansible_facts['ansible_net_neighbors']['sdn12000'])
-        self.assertEquals("sdn-sc-05.ultra.org", ansible_facts['ansible_net_neighbors']['sdn12000']['remote_system_name'])
+        self.assertIn("sdn12000", ansible_facts['ansible_net_lldp'])
+        self.assertIn("local_port_id", ansible_facts['ansible_net_lldp']['sdn12000'])
+        self.assertEquals("sdn12000", ansible_facts['ansible_net_lldp']['sdn12000']['local_port_id'])
+        self.assertIn("remote_chassis_id", ansible_facts['ansible_net_lldp']['sdn12000'])
+        self.assertEquals("b8:59:9f:ed:29:8e", ansible_facts['ansible_net_lldp']['sdn12000']['remote_chassis_id'])
+        self.assertIn("remote_port_id", ansible_facts['ansible_net_lldp']['sdn12000'])
+        self.assertEquals("b859.9fed.298e", ansible_facts['ansible_net_lldp']['sdn12000']['remote_port_id'])
+        self.assertIn("remote_system_name", ansible_facts['ansible_net_lldp']['sdn12000'])
+        self.assertEquals("sdn-sc-05.ultra.org", ansible_facts['ansible_net_lldp']['sdn12000']['remote_system_name'])
 
         self.assertIn('ansible_net_all_ipv4_addresses', ansible_facts)
         self.assertIn('172.16.1.225/255.255.254.0', ansible_facts['ansible_net_all_ipv4_addresses'])
