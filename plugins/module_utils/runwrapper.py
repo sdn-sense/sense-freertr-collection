@@ -9,6 +9,7 @@ Email                   : juztas (at) gmail.com
 @Copyright              : General Public License v3.0+
 Date                    : 2023/11/05
 """
+import inspect
 import time
 
 from ansible.utils.display import Display
@@ -42,5 +43,12 @@ def classwrapper(cls):
     """Class wrapper to print all functions start/runtime/end"""
     for name, method in cls.__dict__.items():
         if callable(method) and name != "__init__":
-            setattr(cls, name, functionwrapper(method))
+            if inspect.isfunction(method):
+                if inspect.signature(method).parameters.get('self'):
+                    setattr(cls, name, functionwrapper(method))
+            elif inspect.ismethod(method):
+                if inspect.signature(method).parameters:
+                    firstParam = next(iter(inspect.signature(method).parameters))
+                    if firstParam == 'self':
+                        setattr(cls, name, functionwrapper(method))
     return cls
